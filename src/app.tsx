@@ -1,20 +1,25 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import {
     createMemo,
-    useToggle
+    useToggle,
+    useUpdate
 } from './hooks'
 
 export default function App(props: any) {
-    const [on, toggle] = useToggle(true)
-    const [a, setA] = useState(1)
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+        setTimeout(()=>{
+            console.log(`you click ${count} times`)
+        }, 3000)
+    })
+
     return (
         <div>
-            <div>{a}</div>
-            <div>{on ? 'ON' : 'OFF'}</div>
-            <button onClick={() => toggle()}>Toggle</button>
-            <button onClick={() => toggle(true)}>set ON</button>
-            <button onClick={() => toggle(false)}>set OFF</button>
-            <button onClick={() => setA(prev => prev + 1)}>add</button>
+            <p>You clicked {count} times</p>
+            <button onClick={() => setCount(count + 1)}>
+                Click me
+            </button>
         </div>
-    )
+    );
 }
