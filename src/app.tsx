@@ -1,25 +1,56 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import { Console } from 'console';
+import React, { useEffect, useState, useMemo, useRef, useReducer } from 'react'
 import {
     createMemo,
     useToggle,
     useUpdate
 } from './hooks'
 
+interface IState {
+    count: number;
+    step: number;
+}
+
+interface IAction {
+    type: ACTION_TYPE,
+    payload?: any
+}
+
+enum ACTION_TYPE {
+    TICK = "tick",
+    STEP = "step"
+}
+
+const reducer = (state: IState, action: IAction) => {
+    const { count, step } = state;
+    if (action.type === ACTION_TYPE.TICK) {
+        return { count: count + step, step };
+    } else if (action.type === ACTION_TYPE.STEP) {
+        return { count, step: action.payload }
+    } else {
+        throw new Error()
+    }
+}
+
 export default function App(props: any) {
-    const [count, setCount] = useState(0);
+    const initialState = {
+        count: 0,
+        step: 1
+    }
+    const [state, dispatch] = useReducer(reducer, initialState)
 
     useEffect(() => {
-        setTimeout(()=>{
-            console.log(`you click ${count} times`)
-        }, 3000)
-    })
+        const id = setInterval(() => {
+            dispatch({ type: ACTION_TYPE.TICK })
+        }, 1000)
+
+        return () => clearInterval(id)
+    }, [dispatch])
 
     return (
         <div>
-            <p>You clicked {count} times</p>
-            <button onClick={() => setCount(count + 1)}>
-                Click me
-            </button>
+            <h1>{state.count}</h1>
+            <input value={state.step} onChange={e => dispatch({ type: ACTION_TYPE.STEP, payload: Number(e.target.value) })} />
         </div>
     );
 }
