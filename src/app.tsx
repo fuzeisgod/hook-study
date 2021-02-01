@@ -5,22 +5,18 @@ import {
     useToggle,
     useUpdate,
     useGetSet,
-    useCounter
+    useCounter,
+    useList
 } from './hooks'
 
 export default function App(props: any) {
-    const [value, { inc, dec, get, set, reset }] = useCounter(5);
+    const [list, {set, push}] = useList();
 
-    return (
-        <div>
-            <div>{value} is {get()}</div>
-            <button onClick={() => inc()}>Increment</button>
-            <button onClick={() => dec()}>Decrement</button>
-            <button onClick={() => inc(5)}>Increment (+5)</button>
-            <button onClick={() => dec(5)}>Decrement (-5)</button>
-            <button onClick={() => set(100)}>Set 100</button>
-            <button onClick={() => reset()}>Reset</button>
-            <button onClick={() => reset(25)}>Reset (25)</button>
-        </div>
-    );
+  return (
+    <div>
+      <div>{list.join(',')}</div>
+      <button onClick={() => set([])}>Reset</button>
+      <button onClick={() => push(Date.now())}>Push</button>
+    </div>
+  );
 }

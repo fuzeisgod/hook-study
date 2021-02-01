@@ -18,7 +18,7 @@ interface Actions<T> {
 const useList = <T>(initialList: T[] = []): [T[], Actions<T>] => {
     const [list, set] = useState<T[]>(initialList)
 
-    return [initialList, {
+    return [list, {
         set,
         clear: () => set([]),
         // slice 方法返回一个新数组，包含从(start<=) && (<end)的新数组，通过扩展运算符（...）展开数组
