@@ -6,17 +6,20 @@ import {
     useUpdate,
     useGetSet,
     useCounter,
-    useList
+    useList,
+    useMap
 } from './hooks'
 
 export default function App(props: any) {
-    const [list, {set, push}] = useList();
+  const [map, {set, reset}] = useMap({
+    hello: 'there',
+  });
 
   return (
     <div>
-      <div>{list.join(',')}</div>
-      <button onClick={() => set([])}>Reset</button>
-      <button onClick={() => push(Date.now())}>Push</button>
+      <pre>{JSON.stringify(map, null, 2)}</pre>
+      <button onClick={() => set(String(Date.now()), (new Date()).toJSON())}>Add</button>
+      <button onClick={() => reset()}>Reset</button>
     </div>
   );
 }

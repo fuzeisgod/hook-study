@@ -10,9 +10,33 @@
 
 import { useState } from 'react'
 
+interface Actions<k, v> {
+    get: (key: k) => any;
+    set: (key: k, value: v) => void;
+    remove: (key: k) => void;
+    reset: () => void;
+}
 
-const useMap = (initialMap: any = {}) => {
+const useMap = <T extends { [key: string]: any }>(initialMap: any = {}): [T, Actions<string, any>] => {
+    const [map, set] = useState(initialMap)
 
+    return [
+        map,
+        {
+            get: (key: string) => map[key],
+            set: (key: string, entry: any) => {
+                set({
+                    ...map,
+                    [key]: entry
+                })
+            },
+            remove: (key: string) => {
+                const { [key]: value, ...rest } = map;
+                set(rest)
+            },
+            reset: () => set(initialMap)
+        }
+    ]
 }
 
 export default useMap;
